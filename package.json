@@ -6,7 +6,14 @@
   "engines": {
     "node": ">=18"
   },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "smoke:public": "node scripts/smoke-public.js"
+  },
   "devDependencies": {
     "vercel": "^59.1.3"
+  },
+  "dependencies": {
+    "undici": "^8.10.0"
   }
 }
