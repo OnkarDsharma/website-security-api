@@ -4,6 +4,7 @@ const { checkExposedPaths } = require('../lib/checkExposedPaths');
 const { checkCMSVersion } = require('../lib/checkCMS');
 const { checkServerLeakage } = require('../lib/checkServerLeakage');
 const { calculateRisk } = require('../lib/scoring');
+const { isSafeUrl } = require('../lib/urlSafety');
 
 function isValidUrl(value) {
   try {
@@ -24,6 +25,12 @@ module.exports = async (req, res) => {
 
   if (!isValidUrl(targetUrl)) {
     res.status(400).json({ error: 'Invalid url. Must start with http:// or https://' });
+    return;
+  }
+
+  const safety = await isSafeUrl(targetUrl);
+  if (!safety.safe) {
+    res.status(400).json({ error: safety.reason });
     return;
   }
 
