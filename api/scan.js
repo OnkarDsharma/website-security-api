@@ -5,6 +5,7 @@ const { checkCMSVersion } = require('../lib/checkCMS');
 const { checkServerLeakage } = require('../lib/checkServerLeakage');
 const { calculateRisk } = require('../lib/scoring');
 const { isSafeUrl } = require('../lib/urlSafety');
+const RAPIDAPI_PROXY_SECRET = process.env.RAPIDAPI_PROXY_SECRET;
 
 function isValidUrl(value) {
   try {
@@ -16,7 +17,13 @@ function isValidUrl(value) {
 }
 
 module.exports = async (req, res) => {
+  if (RAPIDAPI_PROXY_SECRET && req.headers['x-rapidapi-proxy-secret'] !== RAPIDAPI_PROXY_SECRET) {
+    res.status(403).json({ error: 'Direct access is not permitted. Please use this API through RapidAPI.' });
+    return;
+  }
+
   const targetUrl = req.query.url;
+
 
   if (!targetUrl) {
     res.status(400).json({ error: 'Missing required query parameter: url' });
