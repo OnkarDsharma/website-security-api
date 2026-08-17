@@ -1,0 +1,12 @@
+{
+  "name": "website-security-scanner-api",
+  "version": "1.0.0",
+  "description": "Scans a website's headers, SSL, exposed paths, and CMS version for a basic security risk score.",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "vercel": "^59.1.3"
+  }
+}

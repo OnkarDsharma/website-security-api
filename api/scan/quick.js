@@ -1,0 +1,50 @@
+const { checkSecurityHeaders } = require('../../lib/checkHeaders');
+const { checkSSL } = require('../../lib/checkSSL');
+const { calculateRisk } = require('../../lib/scoring');
+
+function isValidUrl(value) {
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch (err) {
+    return false;
+  }
+}
+
+module.exports = async (req, res) => {
+  const targetUrl = req.query.url;
+
+  if (!targetUrl) {
+    res.status(400).json({ error: 'Missing required query parameter: url' });
+    return;
+  }
+
+  if (!isValidUrl(targetUrl)) {
+    res.status(400).json({ error: 'Invalid url. Must start with http:// or https://' });
+    return;
+  }
+
+  try {
+    const [headerFindings, sslFindings] = await Promise.all([
+      checkSecurityHeaders(targetUrl),
+      checkSSL(targetUrl)
+    ]);
+
+    const findings = [...headerFindings, ...sslFindings];
+    const { score, riskLevel, summary } = calculateRisk(findings);
+
+    res.status(200).json({
+      url: targetUrl,
+      scanned_at: new Date().toISOString(),
+      risk_score: score,
+      risk_level: riskLevel,
+      findings,
+      summary
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: 'Scan failed unexpectedly.',
+      detail: err.message
+    });
+  }
+};
