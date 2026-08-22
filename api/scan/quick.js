@@ -50,7 +50,7 @@ module.exports = async (req, res) => {
     res.status(200).json({
       url: targetUrl,
       scanned_at: new Date().toISOString(),
-      risk_score: score,
+      security_score: score,
       risk_level: riskLevel,
       findings,
       summary

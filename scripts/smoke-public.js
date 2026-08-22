@@ -49,7 +49,7 @@ async function main() {
 
     const quick = await callHandler(quickScan, url);
     console.log(
-      `  quick: status=${quick.statusCode}, risk=${quick.body?.risk_level || 'n/a'}, score=${quick.body?.risk_score ?? 'n/a'}, findings=${quick.body?.findings?.length ?? 'n/a'}`
+      `  quick: status=${quick.statusCode}, risk=${quick.body?.risk_level || 'n/a'}, score=${quick.body?.security_score ?? 'n/a'}, findings=${quick.body?.findings?.length ?? 'n/a'}`
     );
     if (quick.statusCode !== 200) {
       console.log(`  quick error: ${quick.body?.error || 'unknown'}`);
@@ -57,7 +57,7 @@ async function main() {
 
     const full = await callHandler(fullScan, url);
     console.log(
-      `  full:  status=${full.statusCode}, risk=${full.body?.risk_level || 'n/a'}, score=${full.body?.risk_score ?? 'n/a'}, findings=${full.body?.findings?.length ?? 'n/a'}`
+      `  full:  status=${full.statusCode}, risk=${full.body?.risk_level || 'n/a'}, score=${full.body?.security_score ?? 'n/a'}, findings=${full.body?.findings?.length ?? 'n/a'}`
     );
     if (full.statusCode !== 200) {
       console.log(`  full error: ${full.body?.error || 'unknown'}`);

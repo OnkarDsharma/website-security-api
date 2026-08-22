@@ -69,7 +69,7 @@ Successful responses return:
 {
   "url": "https://example.com",
   "scanned_at": "2026-08-17T21:36:57.080Z",
-  "risk_score": 63,
+  "security_score": 63,
   "risk_level": "moderate",
   "findings": [
     {
@@ -139,7 +139,7 @@ Example: if a site has one high finding, two medium findings, and two low findin
 The result is:
 
 ```text
-risk_score: 63
+security_score: 63
 risk_level: moderate
 ```
 

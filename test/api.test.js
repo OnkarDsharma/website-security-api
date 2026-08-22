@@ -96,7 +96,7 @@ test('full scan merges checker findings and scores response', async () => {
 
   assert.equal(res.statusCode, 200);
   assert.equal(res.body.url, 'https://example.com');
-  assert.equal(res.body.risk_score, 60);
+  assert.equal(res.body.security_score, 60);
   assert.equal(res.body.risk_level, 'moderate');
   assert.equal(res.body.findings.length, 2);
   assert.equal(res.body.summary.count, 2);
