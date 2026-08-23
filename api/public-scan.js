@@ -21,12 +21,16 @@ module.exports = async (req, res) => {
   // endpoints are for). We restrict it to requests that came from our
   // own site, so it can't be used as a free bypass around RapidAPI's
   // billing.
-  const origin = req.headers.origin || req.headers.referer || '';
-  const allowedOrigin = 'https://website-security-scanner-api.vercel.app';
-  if (!origin.startsWith(allowedOrigin)) {
-    res.status(403).json({ error: 'This endpoint is only available from the official landing page.' });
-    return;
-  }
+    const origin = req.headers.origin || req.headers.referer || '';
+    const allowedOrigins = [
+        'https://website-security-scanner-api.vercel.app',
+        'http://localhost:3000' // allows local testing via `vercel dev`
+    ];
+    const isAllowed = allowedOrigins.some((allowed) => origin.startsWith(allowed));
+    if (!isAllowed) {
+        res.status(403).json({ error: 'This endpoint is only available from the official landing page.' });
+        return;
+    }
 
   const targetUrl = req.query.url;
 
