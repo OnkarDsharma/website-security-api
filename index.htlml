@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Website Security Scanner — free instant security check</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f6f6f3;
+    --paper-raised: #ffffff;
+    --ink: #14171a;
+    --ink-soft: #52585f;
+    --line: #e3e3df;
+    --signal: #2f5fed;
+    --signal-dim: #eef1fd;
+    --critical: #d6373d;
+    --high: #e0672b;
+    --medium: #d99a1f;
+    --low: #6b7280;
+    --ok: #1f9d55;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 72px 24px 120px;
+  }
+
+  header {
+    margin-bottom: 56px;
+  }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--signal);
+    letter-spacing: 0.04em;
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(32px, 5vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    margin: 0 0 18px;
+  }
+
+  .sub {
+    color: var(--ink-soft);
+    font-size: 17px;
+    line-height: 1.55;
+    max-width: 560px;
+  }
+
+  form {
+    margin-top: 40px;
+    display: flex;
+    gap: 10px;
+    border: 1px solid var(--line);
+    background: var(--paper-raised);
+    border-radius: 10px;
+    padding: 6px;
+  }
+
+  form:focus-within {
+    border-color: var(--signal);
+    box-shadow: 0 0 0 3px var(--signal-dim);
+  }
+
+  input[type="url"] {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    padding: 14px 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    color: var(--ink);
+  }
+
+  input[type="url"]::placeholder { color: #9aa0a6; }
+
+  button {
+    border: none;
+    background: var(--ink);
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 0 22px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  button:hover { background: var(--signal); }
+  button:disabled { background: #c9ccd1; cursor: default; }
+
+  .hint {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin-top: 12px;
+  }
+
+  /* Results */
+  #result { margin-top: 48px; display: none; }
+
+  .score-row {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    border: 1px solid var(--line);
+    background: var(--paper-raised);
+    border-radius: 10px;
+    padding: 28px 26px;
+    margin-bottom: 24px;
+  }
+
+  .score-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 52px;
+    line-height: 1;
+  }
+
+  .score-meta { flex: 1; }
+  .score-meta .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+  .score-meta .level {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    text-transform: capitalize;
+  }
+
+  .level-low, .score-num.level-low { color: var(--ok); }
+  .level-moderate, .score-num.level-moderate { color: var(--medium); }
+  .level-high, .score-num.level-high { color: var(--high); }
+  .level-critical, .score-num.level-critical { color: var(--critical); }
+
+  .findings-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 32px 0 12px;
+  }
+
+  .finding {
+    display: flex;
+    gap: 14px;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+    opacity: 0;
+    transform: translateY(6px);
+    animation: rise 0.35s ease forwards;
+  }
+
+  @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+
+  .sev-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+  .sev-critical { background: var(--critical); }
+  .sev-high { background: var(--high); }
+  .sev-medium { background: var(--medium); }
+  .sev-low { background: var(--low); }
+  .sev-info { background: #a9adb3; }
+
+  .finding-body .check {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .finding-body .detail {
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    line-height: 1.5;
+    margin-top: 3px;
+  }
+
+  .clean-msg {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    color: var(--ok);
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .error-box {
+    border: 1px solid #f3c2c4;
+    background: #fdf1f1;
+    color: var(--critical);
+    border-radius: 8px;
+    padding: 16px 18px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    margin-top: 48px;
+    display: none;
+  }
+
+  .scanning {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-top: 48px;
+    display: none;
+  }
+  .scanning::after {
+    content: '';
+    display: inline-block;
+    width: 6px;
+  }
+  .dots span {
+    animation: blink 1.2s infinite;
+    animation-fill-mode: both;
+  }
+  .dots span:nth-child(2) { animation-delay: 0.2s; }
+  .dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+
+  footer {
+    margin-top: 90px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--ink-soft);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  footer a { color: var(--ink-soft); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="eyebrow">// website security scanner</div>
+      <h1>You shipped it fast.<br>Did you check if it's safe?</h1>
+      <p class="sub">Paste any live URL and get an instant security read — missing headers, SSL issues, exposed files, outdated CMS versions, and server leaks. No signup.</p>
+    </header>
+
+    <form id="scan-form">
+      <input type="url" id="url-input" placeholder="https://your-project.vercel.app" required>
+      <button type="submit" id="scan-btn">Scan</button>
+    </form>
+    <div class="hint">Scans typically take 2–8 seconds · only scan sites you own or have permission to test</div>
+
+    <div class="scanning" id="scanning">Scanning<span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
+    <div class="error-box" id="error-box"></div>
+
+    <div id="result">
+      <div class="score-row">
+        <div class="score-num" id="score-num">—</div>
+        <div class="score-meta">
+          <div class="label">Security score</div>
+          <div class="level" id="score-level">—</div>
+        </div>
+      </div>
+      <div class="findings-title">Findings</div>
+      <div id="findings-list"></div>
+    </div>
+
+    <footer>
+      <span>Built for developers shipping fast with AI coding tools.</span>
+      <a href="https://rapidapi.com/onkareshwarsharma7om/api/website-security-api" target="_blank">Use it as an API →</a>
+    </footer>
+  </div>
+
+<script>
+  const form = document.getElementById('scan-form');
+  const input = document.getElementById('url-input');
+  const btn = document.getElementById('scan-btn');
+  const scanning = document.getElementById('scanning');
+  const errorBox = document.getElementById('error-box');
+  const result = document.getElementById('result');
+  const scoreNum = document.getElementById('score-num');
+  const scoreLevel = document.getElementById('score-level');
+  const findingsList = document.getElementById('findings-list');
+
+  const SEVERITY_LABEL = { critical: 'Critical', high: 'High', medium: 'Medium', low: 'Low', info: 'Info' };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const url = input.value.trim();
+
+    result.style.display = 'none';
+    errorBox.style.display = 'none';
+    scanning.style.display = 'block';
+    btn.disabled = true;
+    btn.textContent = 'Scanning…';
+
+    try {
+      const res = await fetch('/api/public-scan?url=' + encodeURIComponent(url));
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Something went wrong.');
+      }
+
+      renderResult(data);
+    } catch (err) {
+      errorBox.textContent = err.message;
+      errorBox.style.display = 'block';
+    } finally {
+      scanning.style.display = 'none';
+      btn.disabled = false;
+      btn.textContent = 'Scan';
+    }
+  });
+
+  function renderResult(data) {
+    scoreNum.textContent = data.security_score;
+    scoreNum.className = 'score-num level-' + data.risk_level;
+    scoreLevel.textContent = data.risk_level + ' risk';
+    scoreLevel.className = 'level level-' + data.risk_level;
+
+    findingsList.innerHTML = '';
+
+    if (!data.findings || data.findings.length === 0) {
+      const clean = document.createElement('div');
+      clean.className = 'clean-msg';
+      clean.textContent = '✓ No issues found across all checks.';
+      findingsList.appendChild(clean);
+    } else {
+      data.findings.forEach((f, i) => {
+        const row = document.createElement('div');
+        row.className = 'finding';
+        row.style.animationDelay = (i * 0.06) + 's';
+        row.innerHTML = `
+          <div class="sev-dot sev-${f.severity}"></div>
+          <div class="finding-body">
+            <div class="check">${escapeHtml(f.check)} <span style="color:var(--ink-soft); font-weight:400;">— ${SEVERITY_LABEL[f.severity] || f.severity}</span></div>
+            <div class="detail">${escapeHtml(f.detail)}</div>
+          </div>
+        `;
+        findingsList.appendChild(row);
+      });
+    }
+
+    result.style.display = 'block';
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+</script>
+</body>
+</html>
