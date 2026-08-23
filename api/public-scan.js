@@ -15,22 +15,34 @@ function isValidUrl(value) {
   }
 }
 
+const ALLOWED_ORIGINS = new Set([
+  'https://website-security-scanner-api.vercel.app',
+  'http://localhost:3000',
+  'http://localhost:3001'
+]);
+
+function getRequestOrigin(req) {
+  const headers = req.headers || {};
+  const headerValue = headers.origin || headers.referer || '';
+
+  try {
+    return new URL(headerValue).origin;
+  } catch (err) {
+    return '';
+  }
+}
+
 module.exports = async (req, res) => {
   // This endpoint powers the public landing page demo only — it's not
   // meant for programmatic/API use (that's what the paid RapidAPI
   // endpoints are for). We restrict it to requests that came from our
   // own site, so it can't be used as a free bypass around RapidAPI's
   // billing.
-    const origin = req.headers.origin || req.headers.referer || '';
-    const allowedOrigins = [
-        'https://website-security-scanner-api.vercel.app',
-        'http://localhost:3000' // allows local testing via `vercel dev`
-    ];
-    const isAllowed = allowedOrigins.some((allowed) => origin.startsWith(allowed));
-    if (!isAllowed) {
-        res.status(403).json({ error: 'This endpoint is only available from the official landing page.' });
-        return;
-    }
+  const requestOrigin = getRequestOrigin(req);
+  if (!ALLOWED_ORIGINS.has(requestOrigin)) {
+    res.status(403).json({ error: 'This endpoint is only available from the official landing page.' });
+    return;
+  }
 
   const targetUrl = req.query.url;
 

@@ -128,3 +128,54 @@ test('quick scan rejects unsafe urls before running checks', async () => {
   assert.equal(res.body.error, 'blocked');
   assert.equal(checkCalled, false);
 });
+
+test('public scan rejects requests outside the landing page origins', async () => {
+  const handler = require('../api/public-scan');
+
+  const missingOriginRes = createMockResponse();
+  await handler({ headers: {}, query: { url: 'https://example.com' } }, missingOriginRes);
+  assert.equal(missingOriginRes.statusCode, 403);
+  assert.equal(missingOriginRes.body.error, 'This endpoint is only available from the official landing page.');
+
+  const spoofedOriginRes = createMockResponse();
+  await handler({
+    headers: { origin: 'https://website-security-scanner-api.vercel.app.evil.test' },
+    query: { url: 'https://example.com' }
+  }, spoofedOriginRes);
+  assert.equal(spoofedOriginRes.statusCode, 403);
+});
+
+test('public scan accepts allowed landing page origins and scores response', async () => {
+  const handler = loadHandler('api/public-scan.js', {
+    'lib/urlSafety.js': { isSafeUrl: async () => ({ safe: true }) },
+    'lib/checkHeaders.js': {
+      checkSecurityHeaders: async () => [{ category: 'headers', check: 'HSTS', status: 'missing', severity: 'high', detail: 'missing' }]
+    },
+    'lib/checkSSL.js': { checkSSL: async () => [] },
+    'lib/checkExposedPaths.js': { checkExposedPaths: async () => [] },
+    'lib/checkCMS.js': { checkCMSVersion: async () => [] },
+    'lib/checkServerLeakage.js': { checkServerLeakage: async () => [] },
+    'lib/scoring.js': {
+      calculateRisk: (findings) => ({
+        score: 85,
+        riskLevel: 'low',
+        summary: { count: findings.length }
+      })
+    }
+  });
+
+  for (const referer of ['http://localhost:3000/', 'http://localhost:3001/']) {
+    const res = createMockResponse();
+    await handler({
+      headers: { referer },
+      query: { url: 'https://example.com' }
+    }, res);
+
+    assert.equal(res.statusCode, 200);
+    assert.equal(res.body.url, 'https://example.com');
+    assert.equal(res.body.security_score, 85);
+    assert.equal(res.body.risk_level, 'low');
+    assert.equal(res.body.findings.length, 1);
+    assert.equal(res.body.summary.count, 1);
+  }
+});

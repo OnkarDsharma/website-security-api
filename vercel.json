@@ -5,6 +5,9 @@
     },
     "api/scan/quick.js": {
       "maxDuration": 10
+    },
+    "api/public-scan.js": {
+      "maxDuration": 15
     }
   }
 }
