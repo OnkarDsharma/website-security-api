@@ -10,6 +10,7 @@ const { checkCookies } = require('../lib/checkCookies');
 const { checkMixedContent } = require('../lib/checkMixedContent');
 const { checkOpenRedirect } = require('../lib/checkOpenRedirect');
 const { isSafeUrl } = require('../lib/urlSafety');
+const { checkRateLimit, getClientIp } = require('../lib/rateLimit');
 
 function isValidUrl(value) {
   try {
@@ -43,9 +44,19 @@ module.exports = async (req, res) => {
   // endpoints are for). We restrict it to requests that came from our
   // own site, so it can't be used as a free bypass around RapidAPI's
   // billing.
-  const requestOrigin = getRequestOrigin(req);
+    const requestOrigin = getRequestOrigin(req);
   if (!ALLOWED_ORIGINS.has(requestOrigin)) {
     res.status(403).json({ error: 'This endpoint is only available from the official landing page.' });
+    return;
+  }
+
+  const clientIp = getClientIp(req);
+  const rateLimit = checkRateLimit(clientIp);
+  if (!rateLimit.allowed) {
+    res.status(429).json({
+      error: `You've reached today's free scan limit. Try again in about ${rateLimit.resetsInMinutes} minutes, or use the full API via RapidAPI for unlimited scans.`,
+      rapidapi_url: 'https://rapidapi.com/onkareshwarsharma7om/api/website-security-api'
+    });
     return;
   }
 
