@@ -4,7 +4,13 @@ const { checkExposedPaths } = require('../lib/checkExposedPaths');
 const { checkCMSVersion } = require('../lib/checkCMS');
 const { checkServerLeakage } = require('../lib/checkServerLeakage');
 const { calculateRisk } = require('../lib/scoring');
+const { checkEmailSecurity } = require('../lib/checkEmailSecurity');
+const { checkCORS } = require('../lib/checkCORS');
+const { checkCookies } = require('../lib/checkCookies');
+const { checkMixedContent } = require('../lib/checkMixedContent');
+const { checkOpenRedirect } = require('../lib/checkOpenRedirect');
 const { isSafeUrl } = require('../lib/urlSafety');
+
 const RAPIDAPI_PROXY_SECRET = process.env.RAPIDAPI_PROXY_SECRET;
 
 function isValidUrl(value) {
@@ -44,13 +50,20 @@ module.exports = async (req, res) => {
   try {
     // Run all checks in parallel — they're independent of each other,
     // so there's no reason to wait for one before starting the next.
-    const [headerFindings, sslFindings, pathFindings, cmsFindings, serverFindings] =
-      await Promise.all([
+        const [
+      headerFindings, sslFindings, pathFindings, cmsFindings, serverFindings,
+      emailFindings, corsFindings, cookieFindings, mixedContentFindings, redirectFindings
+    ] = await Promise.all([
         checkSecurityHeaders(targetUrl),
         checkSSL(targetUrl),
         checkExposedPaths(targetUrl),
         checkCMSVersion(targetUrl),
-        checkServerLeakage(targetUrl)
+        checkServerLeakage(targetUrl),
+        checkEmailSecurity(targetUrl),
+        checkCORS(targetUrl),
+        checkCookies(targetUrl),
+        checkMixedContent(targetUrl),
+        checkOpenRedirect(targetUrl)
       ]);
 
     const findings = [
@@ -58,7 +71,12 @@ module.exports = async (req, res) => {
       ...sslFindings,
       ...pathFindings,
       ...cmsFindings,
-      ...serverFindings
+      ...serverFindings,
+      ...emailFindings,
+      ...corsFindings,
+      ...cookieFindings,
+      ...mixedContentFindings,
+      ...redirectFindings
     ];
 
     const { score, riskLevel, summary } = calculateRisk(findings);

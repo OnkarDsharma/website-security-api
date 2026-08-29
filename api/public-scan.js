@@ -4,6 +4,11 @@ const { checkExposedPaths } = require('../lib/checkExposedPaths');
 const { checkCMSVersion } = require('../lib/checkCMS');
 const { checkServerLeakage } = require('../lib/checkServerLeakage');
 const { calculateRisk } = require('../lib/scoring');
+const { checkEmailSecurity } = require('../lib/checkEmailSecurity');
+const { checkCORS } = require('../lib/checkCORS');
+const { checkCookies } = require('../lib/checkCookies');
+const { checkMixedContent } = require('../lib/checkMixedContent');
+const { checkOpenRedirect } = require('../lib/checkOpenRedirect');
 const { isSafeUrl } = require('../lib/urlSafety');
 
 function isValidUrl(value) {
@@ -63,13 +68,20 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const [headerFindings, sslFindings, pathFindings, cmsFindings, serverFindings] =
-      await Promise.all([
+        const [
+      headerFindings, sslFindings, pathFindings, cmsFindings, serverFindings,
+      emailFindings, corsFindings, cookieFindings, mixedContentFindings, redirectFindings
+    ] = await Promise.all([
         checkSecurityHeaders(targetUrl),
         checkSSL(targetUrl),
         checkExposedPaths(targetUrl),
         checkCMSVersion(targetUrl),
-        checkServerLeakage(targetUrl)
+        checkServerLeakage(targetUrl),
+        checkEmailSecurity(targetUrl),
+        checkCORS(targetUrl),
+        checkCookies(targetUrl),
+        checkMixedContent(targetUrl),
+        checkOpenRedirect(targetUrl)
       ]);
 
     const findings = [
@@ -77,7 +89,12 @@ module.exports = async (req, res) => {
       ...sslFindings,
       ...pathFindings,
       ...cmsFindings,
-      ...serverFindings
+      ...serverFindings,
+      ...emailFindings,
+      ...corsFindings,
+      ...cookieFindings,
+      ...mixedContentFindings,
+      ...redirectFindings
     ];
 
     const { score, riskLevel, summary } = calculateRisk(findings);
