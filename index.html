@@ -4,186 +4,749 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Website Security Scanner — free instant security check</title>
+<meta name="description" content="Paste any live URL and get an instant security read across 10 checks — headers, SSL, exposed files, email spoofing protection, CORS, cookies, and more.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --paper: #f6f6f3;
+    --paper: #f5f6f8;
     --paper-raised: #ffffff;
     --ink: #14171a;
     --ink-soft: #52585f;
-    --line: #e3e3df;
+    --ink-faint: #8a9098;
+    --line: #e6e7ea;
     --signal: #2f5fed;
     --signal-dim: #eef1fd;
+    --signal-dark: #1f45c9;
+    --violet: #7c6cff;
     --critical: #d6373d;
+    --critical-dim: #fdf1f1;
     --high: #e0672b;
-    --medium: #d99a1f;
+    --high-dim: #fdf1e8;
+    --medium: #c58a12;
+    --medium-dim: #fdf7ea;
     --low: #6b7280;
+    --low-dim: #f2f3f5;
     --ok: #1f9d55;
+    --ok-dim: #eefaf2;
+    --shadow-sm: 0 1px 2px rgba(20,23,26,.05), 0 6px 16px -8px rgba(20,23,26,.08);
+    --shadow-md: 0 24px 48px -28px rgba(15,20,30,.35);
+    --shadow-lg: 0 10px 34px -14px rgba(20,23,26,.16);
   }
 
   * { box-sizing: border-box; }
 
+  html { scroll-behavior: smooth; }
+
   body {
     margin: 0;
-    background: var(--paper);
+    background:
+      radial-gradient(1000px 500px at 85% -150px, rgba(124,108,255,.07), transparent 60%),
+      radial-gradient(900px 480px at -10% 0px, rgba(47,95,237,.06), transparent 55%),
+      var(--paper);
     color: var(--ink);
     font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 
+  ::selection { background: var(--signal); color: #fff; }
+
   .wrap {
-    max-width: 760px;
+    max-width: 1240px;
     margin: 0 auto;
-    padding: 72px 24px 120px;
+    padding: 40px 32px 110px;
   }
 
-  header {
-    margin-bottom: 56px;
+  a { color: var(--signal); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(900px 480px at 88% -30%, rgba(61,109,255,.30), transparent 60%),
+      radial-gradient(800px 460px at 4% 118%, rgba(124,108,255,.18), transparent 55%),
+      linear-gradient(180deg, #0f1217 0%, #161b23 100%);
+    border-radius: 24px;
+    padding: 44px 46px 40px;
+    color: #fff;
+    margin-bottom: 64px;
   }
 
-  .eyebrow {
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+    background-size: 42px 42px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(140deg, rgba(255,255,255,.28), rgba(255,255,255,.05) 40%, rgba(124,108,255,.35) 100%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .blob {
+    position: absolute !important;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: .5;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .blob-a {
+    width: 360px; height: 360px;
+    background: rgba(61,109,255,.55);
+    top: -140px; right: -80px;
+    animation: drift 14s ease-in-out infinite alternate;
+  }
+  .blob-b {
+    width: 320px; height: 320px;
+    background: rgba(124,108,255,.45);
+    bottom: -160px; left: -100px;
+    animation: drift 18s ease-in-out infinite alternate-reverse;
+  }
+
+  @keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(-46px, 34px) scale(1.18); }
+  }
+
+  .hero > *:not(.blob) { position: relative; z-index: 1; }
+
+  .hero-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 34px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+  }
+
+  .brand-mark {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--signal), var(--violet));
+    box-shadow: 0 4px 14px -4px rgba(61,109,255,.7);
+  }
+  .brand-mark svg { width: 15px; height: 15px; }
+
+  .hero-top .api-link {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
-    color: var(--signal);
-    letter-spacing: 0.04em;
-    margin-bottom: 14px;
+    font-size: 12.5px;
+    color: rgba(255,255,255,.75);
+    border: 1px solid rgba(255,255,255,.18);
+    background: rgba(255,255,255,.05);
+    padding: 7px 14px;
+    border-radius: 999px;
+    transition: border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .hero-top .api-link:hover {
+    color: #fff;
+    border-color: rgba(255,255,255,.4);
+    background: rgba(255,255,255,.1);
+    text-decoration: none;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.06);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: #cfe0ff;
+    letter-spacing: 0.02em;
+    margin-bottom: 18px;
+  }
+
+  .badge .pulse-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #37d67a;
+    box-shadow: 0 0 0 0 rgba(55,214,122,.5);
+    animation: ring 2.2s infinite;
+  }
+
+  @keyframes ring {
+    0% { box-shadow: 0 0 0 0 rgba(55,214,122,.45); }
+    70% { box-shadow: 0 0 0 7px rgba(55,214,122,0); }
+    100% { box-shadow: 0 0 0 0 rgba(55,214,122,0); }
   }
 
   h1 {
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 700;
-    font-size: clamp(32px, 5vw, 46px);
+    font-size: clamp(30px, 5.4vw, 46px);
     line-height: 1.08;
-    letter-spacing: 0;
+    letter-spacing: -0.015em;
     margin: 0 0 18px;
+    text-wrap: balance;
   }
 
-  .sub {
-    color: var(--ink-soft);
-    font-size: 17px;
-    line-height: 1.55;
-    max-width: 560px;
+  h1 .grad { background: linear-gradient(100deg, #7aa2ff 0%, #b3a2ff 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+  .hero .sub {
+    color: rgba(255,255,255,.72);
+    font-size: 16.5px;
+    line-height: 1.6;
+    max-width: 640px;
+    margin: 0 0 8px;
   }
 
-  form {
-    margin-top: 40px;
+  .hero-stats {
     display: flex;
-    gap: 10px;
-    border: 1px solid var(--line);
-    background: var(--paper-raised);
-    border-radius: 8px;
-    padding: 6px;
+    flex-wrap: wrap;
+    gap: 10px 32px;
+    margin-top: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: rgba(255,255,255,.55);
+  }
+  .hero-stats b { color: #fff; font-weight: 600; }
+
+  /* ---------- Social proof ---------- */
+  .proof-banner {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+    padding: 14px 22px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: linear-gradient(100deg, rgba(124,108,255,.14), rgba(47,95,237,.12) 60%, rgba(255,255,255,.05));
+    border-radius: 14px;
+  }
+
+  .proof-avatars {
+    display: flex;
+    align-items: center;
+    margin-right: 4px;
+  }
+  .avat {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    border: 2px solid #1b2028;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: #fff;
+    margin-left: -10px;
+    position: relative;
+    box-shadow: 0 2px 6px rgba(0,0,0,.25);
+  }
+  .avat:first-child { margin-left: 0; }
+  .avat:nth-child(1) { background: linear-gradient(135deg,#ff9a5a,#f95d6a); }
+  .avat:nth-child(2) { background: linear-gradient(135deg,#5aa9ff,#7c6cff); }
+  .avat:nth-child(3) { background: linear-gradient(135deg,#37d67a,#14b06e); }
+  .avat:nth-child(4) { background: linear-gradient(135deg,#f9c74f,#f4a261); }
+  .avat:nth-child(5) { background: linear-gradient(135deg,#d16bff,#7c6cff); }
+
+  .proof-copy { flex: 1; min-width: 200px; }
+  .proof-copy .p-top {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .proof-copy .count {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1;
+    background: linear-gradient(100deg, #9cc2ff 0%, #cfc2ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .proof-copy .p-top .txt {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 15.5px;
+    color: rgba(255,255,255,.92);
+  }
+  .proof-copy .p-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: rgba(255,255,255,.55);
+    margin-top: 4px;
+  }
+
+  @media (max-width: 620px) {
+    .proof-banner { gap: 16px; }
+  }
+
+  /* ---------- Form ---------- */
+  form {
+    margin-top: 34px;
+    display: flex;
+    gap: 8px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: #fff;
+    border-radius: 14px;
+    padding: 8px;
+    box-shadow: var(--shadow-md);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
 
   form:focus-within {
     border-color: var(--signal);
-    box-shadow: 0 0 0 3px var(--signal-dim);
+    box-shadow: 0 0 0 4px rgba(124,108,255,.25), var(--shadow-md);
+  }
+
+  @media (min-width: 700px) {
+    form { max-width: 900px; margin-left: auto; margin-right: auto; }
+  }
+
+  @media (max-width: 520px) {
+    form { flex-direction: column; padding: 10px; }
   }
 
   input[type="url"] {
     flex: 1;
+    min-width: 0;
     border: none;
     background: transparent;
     outline: none;
-    padding: 14px 12px;
+    padding: 16px 16px;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 15px;
     color: var(--ink);
   }
 
-  input[type="url"]::placeholder { color: #9aa0a6; }
+  input[type="url"]::placeholder { color: #a6aab1; }
 
   button {
     border: none;
-    background: var(--ink);
+    background: linear-gradient(135deg, #3b6bff 0%, #2554e6 100%);
     color: white;
     font-family: 'Inter', sans-serif;
     font-weight: 600;
     font-size: 15px;
-    padding: 0 22px;
-    border-radius: 6px;
+    padding: 0 26px;
+    height: 50px;
+    border-radius: 9px;
     cursor: pointer;
-    transition: background 0.15s ease;
+    box-shadow: 0 6px 18px -6px rgba(47,95,237,.55);
+    transition: filter 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
   }
 
-  button:hover { background: var(--signal); }
-  button:disabled { background: #c9ccd1; cursor: default; }
+  button::after {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0;
+    left: -80%;
+    width: 50%;
+    background: linear-gradient(115deg, transparent, rgba(255,255,255,.35), transparent);
+    transform: skewX(-20deg);
+    pointer-events: none;
+  }
 
-  .hint {
+  button svg { width: 15px; height: 15px; position: relative; z-index: 1; }
+  button span { position: relative; z-index: 1; }
+  button:hover { filter: brightness(1.08); box-shadow: 0 8px 22px -6px rgba(47,95,237,.65); }
+  button:hover::after { animation: shimmer 0.65s ease; }
+  button:active { transform: scale(0.98); }
+  button:disabled { background: #c9ccd1; box-shadow: none; cursor: default; transform: none; }
+
+  @keyframes shimmer { to { left: 130%; } }
+
+  .scan-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: rgba(255,255,255,.5);
+    margin-top: 14px;
+  }
+  .scan-hint svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+  .quick-chips {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  .quick-chips .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: rgba(255,255,255,.4);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .qchip {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 12.5px;
-    color: var(--ink-soft);
-    margin-top: 12px;
+    color: rgba(255,255,255,.75);
+    border: 1px solid rgba(255,255,255,.2);
+    background: transparent;
+    padding: 7px 13px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .qchip:hover {
+    color: #fff; border-color: rgba(255,255,255,.5); background: rgba(255,255,255,.08); text-decoration: none;
+  }
+  .qchip:active { transform: scale(0.97); }
+
+  /* ---------- Panels ---------- */
+  #scanning-panel, #result {
+    max-width: 960px;
+    margin: 24px auto 0;
+    display: none;
+  }
+  #rate-limit-panel, #error-box {
+    max-width: 960px;
+    margin: 24px auto 0;
+    display: none;
   }
 
-  /* Results */
-  #result { margin-top: 48px; display: none; }
+  /* ---------- Scanning state ---------- */
+  #scanning-panel {
+    border: 1px solid var(--line);
+    background: var(--paper-raised);
+    border-radius: 18px;
+    padding: 28px 30px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .scan-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .spinner {
+    width: 22px; height: 22px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 2.5px solid var(--signal-dim);
+    border-top-color: var(--signal);
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .scan-head .title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+  }
+  .scan-head .target {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--signal);
+    word-break: break-all;
+    margin-top: 2px;
+  }
+
+  .progress {
+    height: 6px;
+    background: #eceef2;
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 16px 0 20px;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--signal), var(--violet));
+    transition: width 0.45s ease;
+  }
+
+  .scan-checklist {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 38px;
+    row-gap: 10px;
+  }
+
+  @media (max-width: 560px) {
+    .scan-checklist { grid-template-columns: 1fr; }
+  }
+
+  .scan-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--ink-faint);
+    opacity: 0.45;
+    transition: opacity 0.25s ease, color 0.25s ease;
+  }
+
+  .scan-item.active { opacity: 1; color: var(--ink); font-weight: 500; }
+  .scan-item.done { opacity: 1; color: var(--ok); }
+
+  .scan-dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--ink-faint);
+    flex-shrink: 0;
+    transition: background 0.25s ease;
+  }
+  .scan-item.active .scan-dot {
+    background: var(--signal);
+    box-shadow: 0 0 0 4px rgba(47,95,237,.15);
+    animation: pulse 0.9s infinite ease-in-out;
+  }
+  .scan-item.done .scan-dot {
+    background: transparent;
+    border: 2px solid var(--ok);
+  }
+  .scan-item.done .scan-dot::after {
+    content: "";
+    width: 3.5px; height: 6px;
+    border-right: 1.8px solid var(--ok);
+    border-bottom: 1.8px solid var(--ok);
+    position: absolute;
+    transform: translate(-50%,-45%) rotate(45deg);
+  }
+  .scan-item .scan-dot { position: relative; }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.35); opacity: 0.55; }
+  }
+
+  /* ---------- Result ---------- */
+  #result { animation: fadeUp 0.35s ease; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
   .score-row {
     display: flex;
-    align-items: baseline;
-    gap: 20px;
+    align-items: center;
+    gap: 28px;
     border: 1px solid var(--line);
     background: var(--paper-raised);
-    border-radius: 8px;
-    padding: 28px 26px;
-    margin-bottom: 24px;
+    border-radius: 18px;
+    padding: 32px 34px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 22px;
   }
 
-  .score-num {
-    font-family: 'IBM Plex Mono', monospace;
-    font-weight: 600;
-    font-size: 52px;
+  @media (max-width: 480px) {
+    .score-row { flex-direction: column; align-items: flex-start; gap: 18px; }
+  }
+
+  .ring {
+    position: relative;
+    width: 132px;
+    height: 132px;
+    flex-shrink: 0;
+  }
+  .ring svg { transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: #eceef2; stroke-width: 11; }
+  .ring-fg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 11;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1.1s cubic-bezier(.22,1,.36,1), color .3s ease;
+  }
+
+  .ring.level-low { color: var(--ok); }
+  .ring.level-moderate { color: var(--medium); }
+  .ring.level-high { color: var(--high); }
+  .ring.level-critical { color: var(--critical); }
+
+  .ring-num {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     line-height: 1;
   }
+  .ring-num .num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 40px;
+    color: var(--ink);
+  }
+  .ring-num .of {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    margin-top: 6px;
+  }
 
-  .score-meta { flex: 1; }
+  .score-meta { flex: 1; min-width: 0; }
   .score-meta .label {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 12px;
-    color: var(--ink-soft);
+    color: var(--ink-faint);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 4px;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
   }
   .score-meta .level {
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 24px;
+    letter-spacing: -0.01em;
     text-transform: capitalize;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .score-meta .level .level-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .score-meta .level.level-low .level-dot { background: var(--ok); }
+  .score-meta .level.level-moderate .level-dot { background: var(--medium); }
+  .score-meta .level.level-high .level-dot { background: var(--high); }
+  .score-meta .level.level-critical .level-dot { background: var(--critical); }
+
+  .score-meta .level.level-low { color: var(--ok); }
+  .score-meta .level.level-moderate { color: var(--medium); }
+  .score-meta .level.level-high { color: var(--high); }
+  .score-meta .level.level-critical { color: var(--critical); }
+
+  .score-note {
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    line-height: 1.55;
+    margin-top: 8px;
   }
 
-  .level-low, .score-num.level-low { color: var(--ok); }
-  .level-moderate, .score-num.level-moderate { color: var(--medium); }
-  .level-high, .score-num.level-high { color: var(--high); }
-  .level-critical, .score-num.level-critical { color: var(--critical); }
-
-  .findings-title {
+  .score-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .score-tag {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 12px;
     color: var(--ink-soft);
+    background: #f1f2f5;
+    border-radius: 999px;
+    padding: 5px 11px;
+  }
+  .score-tag b { color: var(--ink); font-weight: 600; }
+
+  .scan-again {
+    align-self: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    background: var(--paper-raised);
+    border-radius: 999px;
+    padding: 8px 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: border-color .15s ease, color .15s ease;
+    white-space: nowrap;
+  }
+  .scan-again:hover { border-color: var(--signal); color: var(--signal); }
+  .scan-again svg { width: 13px; height: 13px; }
+
+  .findings-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 32px 2px 12px;
+  }
+  .findings-title .f-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-faint);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin: 32px 0 12px;
+    letter-spacing: 0.06em;
+  }
+  .findings-title .f-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--signal);
+    background: var(--signal-dim);
+    border-radius: 999px;
+    padding: 3px 9px;
+  }
+
+  .findings-card {
+    border: 1px solid var(--line);
+    background: var(--paper-raised);
+    border-radius: 18px;
+    padding: 6px 30px;
+    box-shadow: var(--shadow-sm);
   }
 
   .finding {
     display: flex;
     gap: 14px;
-    padding: 16px 0;
+    padding: 18px 0;
     border-top: 1px solid var(--line);
     opacity: 0;
     transform: translateY(6px);
     animation: rise 0.35s ease forwards;
   }
+  .finding:first-child { border-top: none; }
 
   @keyframes rise { to { opacity: 1; transform: translateY(0); } }
 
   .sev-dot {
-    width: 8px; height: 8px;
+    width: 11px; height: 11px;
     border-radius: 50%;
-    margin-top: 7px;
+    margin-top: 6px;
     flex-shrink: 0;
   }
   .sev-critical { background: var(--critical); }
@@ -192,103 +755,566 @@
   .sev-low { background: var(--low); }
   .sev-info { background: #a9adb3; }
 
+  .finding-body { flex: 1; min-width: 0; }
   .finding-body .check {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
     font-family: 'IBM Plex Mono', monospace;
     font-weight: 600;
     font-size: 14px;
   }
+
+  .sev-pill {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 999px;
+    padding: 3px 9px;
+  }
+  .sev-pill.sev-critical { background: var(--critical-dim); color: var(--critical); }
+  .sev-pill.sev-high { background: var(--high-dim); color: var(--high); }
+  .sev-pill.sev-medium { background: var(--medium-dim); color: var(--medium); }
+  .sev-pill.sev-low { background: var(--low-dim); color: var(--low); }
+  .sev-pill.sev-info { background: #f1f2f5; color: var(--ink-soft); }
+
   .finding-body .detail {
     color: var(--ink-soft);
     font-size: 14.5px;
-    line-height: 1.5;
-    margin-top: 3px;
+    line-height: 1.55;
+    margin-top: 5px;
   }
 
   .clean-msg {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 14px;
-    color: var(--ok);
-    padding: 16px 0;
-    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 0;
   }
+  .clean-msg .clean-ico {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--ok-dim);
+    color: var(--ok);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .clean-msg .clean-ico svg { width: 18px; height: 18px; }
+  .clean-msg .clean-text { font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: var(--ok); }
+  .clean-msg .clean-sub { color: var(--ink-soft); font-size: 13px; margin-top: 3px; font-family: 'Inter', sans-serif; }
+  .clean-msg .clean-body { min-width: 0; }
+
+  /* Rate limit — calm, not alarming */
+  #rate-limit-panel {
+    border: 1px solid var(--signal-dim);
+    background: linear-gradient(160deg, var(--signal-dim), #f7f8ff);
+    border-radius: 18px;
+    padding: 28px 32px;
+    box-shadow: var(--shadow-sm);
+  }
+  #rate-limit-panel .title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    color: var(--signal-dark);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  #rate-limit-panel .title svg { width: 20px; height: 20px; }
+  #rate-limit-panel p {
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    line-height: 1.6;
+    margin: 0 0 18px;
+  }
+  #rate-limit-panel a.cta {
+    display: inline-block;
+    background: var(--signal);
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 11px 20px;
+    border-radius: 9px;
+    box-shadow: 0 6px 18px -8px rgba(47,95,237,.6);
+  }
+  #rate-limit-panel a.cta:hover { background: var(--signal-dark); text-decoration: none; }
 
   .error-box {
     border: 1px solid #f3c2c4;
-    background: #fdf1f1;
+    background: var(--critical-dim);
     color: var(--critical);
-    border-radius: 8px;
-    padding: 16px 18px;
+    border-radius: 14px;
+    padding: 18px 22px;
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 14px;
-    margin-top: 48px;
-    display: none;
+    font-size: 13.5px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    box-shadow: var(--shadow-sm);
+  }
+  .error-box svg { width: 17px; height: 17px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ---------- How it works ---------- */
+  section.guide {
+    margin-top: 96px;
+    padding-top: 52px;
+    border-top: 1px solid var(--line);
   }
 
-  .scanning {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 14px;
+  section.guide h2, section.checks h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: -0.01em;
+    margin: 0 0 8px;
+  }
+
+  section.guide .section-sub, section.checks .section-sub {
     color: var(--ink-soft);
-    margin-top: 48px;
-    display: none;
+    font-size: 15px;
+    line-height: 1.55;
+    margin: 0 0 34px;
+    max-width: 640px;
   }
-  .scanning::after {
-    content: '';
-    display: inline-block;
-    width: 6px;
-  }
-  .dots span {
-    animation: blink 1.2s infinite;
-    animation-fill-mode: both;
-  }
-  .dots span:nth-child(2) { animation-delay: 0.2s; }
-  .dots span:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
 
+  .guide-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 26px;
+  }
+
+  @media (max-width: 620px) {
+    .guide-cards { grid-template-columns: 1fr; }
+  }
+
+  .guide-card {
+    border: 1px solid var(--line);
+    background: var(--paper-raised);
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .guide-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+
+  .guide-card .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--signal);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+
+  .guide-card h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    margin: 0 0 10px;
+  }
+
+  .guide-card p {
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    line-height: 1.6;
+    margin: 0 0 14px;
+  }
+
+  .guide-card ul {
+    margin: 0 0 16px;
+    padding-left: 18px;
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+  .guide-card li::marker { color: var(--signal); }
+
+  .code-block {
+    background: var(--ink);
+    color: #dbe4ff;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    padding: 14px 16px;
+    border-radius: 10px;
+    overflow-x: auto;
+    white-space: pre;
+    flex: 1;
+  }
+  .code-block .comment { color: #7d8698; }
+  .code-block .string { color: #a8e6a1; }
+
+  /* ---------- What we check ---------- */
+  section.checks { margin-top: 72px; }
+
+  .checks-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 620px) {
+    .checks-grid { grid-template-columns: 1fr; }
+  }
+
+  .check-card {
+    border: 1px solid var(--line);
+    background: var(--paper-raised);
+    border-radius: 16px;
+    padding: 22px 24px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+  .check-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: #d3d8e6; }
+
+  .check-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .check-ico {
+    width: 40px; height: 40px;
+    border-radius: 11px;
+    background: var(--signal-dim);
+    color: var(--signal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .check-ico svg { width: 19px; height: 19px; }
+
+  .check-card .num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-faint);
+  }
+
+  .check-card:nth-child(1) .check-ico { background: #eef1fd; color: #2f5fed; }
+  .check-card:nth-child(2) .check-ico { background: #eaf6ef; color: #1f9d55; }
+  .check-card:nth-child(3) .check-ico { background: #fcefe6; color: #e0672b; }
+  .check-card:nth-child(4) .check-ico { background: #f0edfe; color: #7c6cff; }
+  .check-card:nth-child(5) .check-ico { background: #e7f3f5; color: #0e9aa7; }
+  .check-card:nth-child(6) .check-ico { background: #fdf3e6; color: #c58a12; }
+  .check-card:nth-child(7) .check-ico { background: #eaeefb; color: #3b5bdb; }
+  .check-card:nth-child(8) .check-ico { background: #fbe9f1; color: #d6336c; }
+  .check-card:nth-child(9) .check-ico { background: #fdf1f1; color: #d6373d; }
+  .check-card:nth-child(10) .check-ico { background: #eceef9; color: #4f5bd5; }
+
+  .check-card h4 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15.5px;
+    margin: 2px 0 0;
+  }
+
+  .check-card p {
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    line-height: 1.55;
+    margin: 10px 0 0;
+  }
+
+  .limitations {
+    margin-top: 24px;
+    padding: 20px 24px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #fbfbfc;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    box-shadow: var(--shadow-sm);
+  }
+  .limitations strong { color: var(--ink); }
+  .limitations a { color: var(--signal); }
+
+  /* ---------- Footer ---------- */
   footer {
-    margin-top: 90px;
+    margin-top: 96px;
     padding-top: 24px;
     border-top: 1px solid var(--line);
     font-size: 13px;
     color: var(--ink-soft);
     display: flex;
     justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
     gap: 10px;
   }
-  footer a { color: var(--ink-soft); }
+
+  .footer-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 13.5px;
+    color: var(--ink);
+  }
+  .footer-brand .brand-mark { width: 20px; height: 20px; border-radius: 6px; }
+  .footer-brand .brand-mark svg { width: 11px; height: 11px; }
+
+  @media (max-width: 420px) {
+    footer { flex-direction: column; align-items: flex-start; }
+  }
 </style>
 </head>
 <body>
   <div class="wrap">
-    <header>
-      <div class="eyebrow">// website security scanner</div>
-      <h1>You shipped it fast.<br>Did you check if it's safe?</h1>
-      <p class="sub">Paste any live URL and get an instant security read — missing headers, SSL issues, exposed files, outdated CMS versions, and server leaks. No signup.</p>
-    </header>
 
-    <form id="scan-form">
-      <input type="url" id="url-input" placeholder="https://your-project.vercel.app" required>
-      <button type="submit" id="scan-btn">Scan</button>
-    </form>
-    <div class="hint">Scans typically take 2–8 seconds · only scan sites you own or have permission to test</div>
+    <header class="hero" id="hero">
+      <div class="blob blob-a"></div>
+      <div class="blob blob-b"></div>
+      <div class="hero-top">
+        <div class="brand">
+          <span class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"/></svg>
+          </span>
+          SiteGuard
+        </div>
+        <a class="api-link" href="https://rapidapi.com/onkareshwarsharma7om/api/website-security-api" target="_blank" rel="noopener">API docs →</a>
+      </div>
 
-    <div class="scanning" id="scanning">Scanning<span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
-    <div class="error-box" id="error-box"></div>
+      <div class="badge"><span class="pulse-dot"></span> Free · no signup · 10 checks per scan</div>
+      <h1>You shipped it fast.<br>Did you check if it's <span class="grad">safe?</span></h1>
+      <p class="sub">Paste any live URL and get an instant security read across 10 checks — headers, SSL, exposed files, email spoofing protection, CORS, cookies, and more.</p>
 
-    <div id="result">
-      <div class="score-row">
-        <div class="score-num" id="score-num">—</div>
-        <div class="score-meta">
-          <div class="label">Security score</div>
-          <div class="level" id="score-level">—</div>
+      <div class="hero-stats">
+        <span><b>10</b> checks</span>
+        <span><b>2–8 s</b> typical scan</span>
+        <span><b>10</b> free scans / day</span>
+        <span><b>0</b> signup</span>
+      </div>
+
+      <div class="proof-banner">
+        <div class="proof-avatars" aria-hidden="true">
+          <span class="avat">S</span>
+          <span class="avat">A</span>
+          <span class="avat">M</span>
+          <span class="avat">J</span>
+          <span class="avat">K</span>
+        </div>
+        <div class="proof-copy">
+          <div class="p-top">
+            <span class="count" id="user-count">0+</span>
+            <span class="txt">developers have tried SiteGuard via RapidAPI</span>
+          </div>
+          <div class="p-sub">
+            Available on the RapidAPI marketplace · free web scans run right here, no signup
+          </div>
         </div>
       </div>
-      <div class="findings-title">Findings</div>
-      <div id="findings-list"></div>
+
+      <form id="scan-form" role="search" aria-label="Scan a website for security issues">
+        <input type="url" id="url-input" placeholder="https://your-project.vercel.app" autocomplete="off" spellcheck="false" enterkeyhint="go" required aria-label="Website URL to scan">
+        <button type="submit" id="scan-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <span id="scan-btn-label">Scan</span>
+        </button>
+      </form>
+      <div class="scan-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"/></svg>
+        Only scan sites you own or have permission to test.
+      </div>
+
+      <div class="quick-chips">
+        <span class="label">Try one:</span>
+        <button type="button" class="qchip" data-url="https://example.com">example.com</button>
+        <button type="button" class="qchip" data-url="https://www.wikipedia.org">wikipedia.org</button>
+        <button type="button" class="qchip" data-url="https://vercel.com">vercel.com</button>
+        <button type="button" class="qchip" data-url="https://wordpress.org">wordpress.org</button>
+      </div>
+    </header>
+
+    <div id="error-box" class="error-box" role="alert">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5"/><path d="M12 16.5v.01"/><path d="M12 3l10 18H2L12 3z"/></svg>
+      <span id="error-message"></span>
     </div>
 
+    <div id="scanning-panel" role="status" aria-live="polite">
+      <div class="scan-head">
+        <div class="spinner"></div>
+        <div>
+          <div class="title">Scanning…</div>
+          <div class="target" id="scan-target"></div>
+        </div>
+      </div>
+      <div class="progress"><div class="progress-fill" id="scan-progress-fill"></div></div>
+      <div class="scan-checklist" id="scan-checklist"></div>
+    </div>
+
+    <div id="rate-limit-panel">
+      <div class="title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        You've used today's free scans
+      </div>
+      <p id="rate-limit-message"></p>
+      <a class="cta" id="rate-limit-cta" href="https://rapidapi.com/onkareshwarsharma7om/api/website-security-api" target="_blank" rel="noopener">Get unlimited scans via the API →</a>
+    </div>
+
+    <div id="result" role="status" aria-live="polite">
+      <div class="score-row">
+        <div class="ring level-moderate" id="score-ring">
+          <svg viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+            <circle class="ring-fg" cx="60" cy="60" r="52" id="ring-fg"></circle>
+          </svg>
+          <div class="ring-num">
+            <div class="num" id="score-num">—</div>
+            <div class="of">/ 100</div>
+          </div>
+        </div>
+        <div class="score-meta">
+          <div class="label">Security score</div>
+          <div class="level" id="score-level">
+            <span class="level-dot"></span>
+            <span id="score-level-text">—</span>
+          </div>
+          <div class="score-note" id="score-note"></div>
+          <div class="score-tags" id="score-tags"></div>
+        </div>
+        <button type="button" class="scan-again" id="scan-again-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg>
+          Scan another
+        </button>
+      </div>
+
+      <div class="findings-title">
+        <span class="f-label">Findings</span>
+        <span class="f-count" id="findings-count"></span>
+      </div>
+      <div class="findings-card" id="findings-card">
+        <div id="findings-list"></div>
+      </div>
+    </div>
+
+    <!-- How it works -->
+    <section class="guide">
+      <h2>How to use this</h2>
+      <p class="section-sub">Two ways to run a scan, depending on what you need.</p>
+      <div class="guide-cards">
+        <div class="guide-card">
+          <div class="tag">Free · web</div>
+          <h3>Paste a URL, above</h3>
+          <p>Instant results in your browser. No account, no API key. Good for a one-off check on your own project.</p>
+          <ul>
+            <li>10 free scans per day, per visitor</li>
+            <li>Same 10 checks as the full API</li>
+            <li>Nothing to install or configure</li>
+          </ul>
+        </div>
+        <div class="guide-card">
+          <div class="tag">API · RapidAPI</div>
+          <h3>For automated or repeated use</h3>
+          <p>If you need this running in CI/CD before every deploy, across many client sites on a schedule, or built into your own product — use the API directly.</p>
+          <div class="code-block"><span class="comment"># GET request, returns JSON</span>
+curl --request GET \
+  --url <span class="string">'https://website-security-api.p.rapidapi.com/api/scan?url=https://example.com'</span> \
+  --header <span class="string">'x-rapidapi-host: website-security-api.p.rapidapi.com'</span> \
+  --header <span class="string">'x-rapidapi-key: YOUR_KEY'</span></div>
+          <p style="margin-top:14px; margin-bottom:0;"><a href="https://rapidapi.com/onkareshwarsharma7om/api/website-security-api" target="_blank" rel="noopener">View full API docs & pricing →</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- What we check -->
+    <section class="checks">
+      <h2>What we check</h2>
+      <p class="section-sub">Every scan runs these 10 checks in parallel and explains each finding in plain language.</p>
+      <div class="checks-grid">
+        <div class="check-card">
+          <div class="check-top">
+            <div class="check-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></div>
+            <div><div class="num">01</div><h4>Security headers</h4></div>
+          </div>
+          <p>HSTS, CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy.</p>
+        </div>
+        <div class="check-card">
+          <div class="check-top">
+            <div class="check-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+            <div><div class="num">02</div><h4>SSL / TLS</h4></div>
+          </div>
+          <p>Certificate expiry, trust issues, outdated TLS protocol versions.</p>
+        </div>
+        <div class="check-card">
+          <div class="check-top">
+            <div class="check-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg></div>
+            <div><div class="num">03</div><h4>Exposed sensitive files</h4></div>
+          </div>
+          <p>.env, .git/config, AWS credentials, config backups.</p>
+        </div>
+        <div class="check-card">
+          <div class="check-top">
+            <div class="check-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 12l9 5 9-5"/></svg></div>
+            <div><div class="num">04</div><h4>CMS version</h4></div>
+          </div>
+          <p>Detects WordPress, Joomla, Drupal and flags outdated versions.</p>
+        </div>
+        <div class="check-card">
+          <div class="check-top">
+            <div class="check-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="7" rx="2"/><rect x="4" y="13" width="16" height="7" rx="2"/><path d="M8 7.5h.01M8 16.5h.01"/></svg></div>
+            <div><div class="num">05</div><h4>Server info leakage</h4></div>
+          </div>
+          <p>Headers that reveal exact software versions to attackers.</p>
+        </div>
+        <div class="check-card">
+          <div class="check-top">
+            <div class="check-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
+            <div><div class="num">06</div><h4>Email spoofing protection</h4></div>
+          </div>
+          <p>Checks for SPF and DMARC DNS records.</p>
+        </div>
+        <div class="check-card">
+          <div class="check-top">
+            <div class="check-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h14"/><path d="M13 4l4 4-4 4"/><path d="M21 16H7"/><path d="M11 12l-4 4 4 4"/></svg></div>
+            <div><div class="num">07</div><h4>CORS configuration</h4></div>
+          </div>
+          <p>Flags dangerous wide-open + credentialed combinations.</p>
+        </div>
+        <div class="check-card">
+          <div class="check-top">
+            <div class="check-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9 4.5 4.5 0 0 1-6-6 4.5 4.5 0 0 1-3-3z"/><path d="M8.5 13.5h.01M11.5 15.5h.01M12.5 10.5h.01M8.5 8.5h.01"/></svg></div>
+            <div><div class="num">08</div><h4>Cookie security</h4></div>
+          </div>
+          <p>Missing Secure, HttpOnly, or SameSite attributes.</p>
+        </div>
+        <div class="check-card">
+          <div class="check-top">
+            <div class="check-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div>
+            <div><div class="num">09</div><h4>Mixed content</h4></div>
+          </div>
+          <p>HTTP resources quietly loaded on an HTTPS page.</p>
+        </div>
+        <div class="check-card">
+          <div class="check-top">
+            <div class="check-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20C4 11 7 7 20 7"/><path d="M14 3l6 4-6 4"/></svg></div>
+            <div><div class="num">10</div><h4>Open redirects</h4></div>
+          </div>
+          <p>Unvalidated redirect parameters, a common phishing vector.</p>
+        </div>
+      </div>
+      <div class="limitations">
+        <strong>A note on accuracy.</strong> This is an automated, lightweight scanner — not a substitute for a full penetration test or professional security audit. CMS checks use a simple version heuristic, not a CVE database. Open redirect detection tests common parameter names, not an exhaustive list. If a check can't be completed, the report says so explicitly rather than showing a false clean result.
+      </div>
+    </section>
+
     <footer>
-      <span>Built for developers shipping fast with AI coding tools.</span>
+      <span class="footer-brand">
+        <span class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"/></svg>
+        </span>
+        SiteGuard — free website security checks
+      </span>
       <a href="https://rapidapi.com/onkareshwarsharma7om/api/website-security-api" target="_blank" rel="noopener">Use it as an API →</a>
     </footer>
   </div>
@@ -297,28 +1323,176 @@
   const form = document.getElementById('scan-form');
   const input = document.getElementById('url-input');
   const btn = document.getElementById('scan-btn');
-  const scanning = document.getElementById('scanning');
+  const btnLabel = document.getElementById('scan-btn-label');
+  const scanningPanel = document.getElementById('scanning-panel');
+  const scanChecklist = document.getElementById('scan-checklist');
+  const scanTarget = document.getElementById('scan-target');
+  const progressFill = document.getElementById('scan-progress-fill');
   const errorBox = document.getElementById('error-box');
+  const errorMessage = document.getElementById('error-message');
+  const rateLimitPanel = document.getElementById('rate-limit-panel');
+  const rateLimitMessage = document.getElementById('rate-limit-message');
+  const rateLimitCta = document.getElementById('rate-limit-cta');
   const result = document.getElementById('result');
+  const scoreRing = document.getElementById('score-ring');
+  const ringFg = document.getElementById('ring-fg');
   const scoreNum = document.getElementById('score-num');
   const scoreLevel = document.getElementById('score-level');
+  const scoreLevelText = document.getElementById('score-level-text');
+  const scoreNote = document.getElementById('score-note');
+  const scoreTags = document.getElementById('score-tags');
+  const findingsCount = document.getElementById('findings-count');
   const findingsList = document.getElementById('findings-list');
+  const scanAgainBtn = document.getElementById('scan-again-btn');
+  const hero = document.getElementById('hero');
 
   const SEVERITY_LABEL = { critical: 'Critical', high: 'High', medium: 'Medium', low: 'Low', info: 'Info' };
 
+  const LEVEL_NOTE = {
+    low: 'Looks solid. Keep shipping.',
+    moderate: 'A few things worth tightening.',
+    high: 'Notable issues — fix these as soon as you can.',
+    critical: 'Serious problems — address immediately.'
+  };
+
+  const RING_CIRCUMFERENCE = 2 * Math.PI * 52;
+  ringFg.style.strokeDasharray = RING_CIRCUMFERENCE;
+  ringFg.style.strokeDashoffset = RING_CIRCUMFERENCE;
+
+  const CHECK_STAGES = [
+    'Security headers', 'SSL / TLS', 'Exposed files', 'CMS version',
+    'Server leakage', 'Email spoofing (SPF/DMARC)', 'CORS configuration',
+    'Cookie security', 'Mixed content', 'Open redirects'
+  ];
+
+  const QUICK_CHIPS = document.querySelectorAll('.qchip');
+
+  let stageTimer = null;
+
+  function animateUserCount() {
+    const el = document.getElementById('user-count');
+    if (!el) return;
+    const target = 260;
+    const duration = 1400;
+    let started = false;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !started) {
+          started = true;
+          const t0 = performance.now();
+          const step = (t) => {
+            const p = Math.min(1, (t - t0) / duration);
+            const eased = 1 - Math.pow(1 - p, 3);
+            el.textContent = Math.round(target * eased) + '+';
+            if (p < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+          io.disconnect();
+        }
+      });
+    }, { threshold: 0.4 });
+    io.observe(el);
+  }
+  animateUserCount();
+
+  function hideAllPanels() {
+    scanningPanel.style.display = 'none';
+    errorBox.style.display = 'none';
+    rateLimitPanel.style.display = 'none';
+    result.style.display = 'none';
+  }
+
+  function normalizeUrl(value) {
+    const v = value.trim();
+    if (!v) return v;
+    if (/^https?:\/\//i.test(v)) return v;
+    return 'https://' + v;
+  }
+
+  function startScanningAnimation() {
+    scanChecklist.innerHTML = CHECK_STAGES.map((name, i) =>
+      `<div class="scan-item" id="stage-${i}"><div class="scan-dot"></div><span>${name}</span></div>`
+    ).join('');
+    const items = [...scanChecklist.children];
+    scanningPanel.style.display = 'block';
+    scanningPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    let current = 0;
+    const setState = (el, state) => {
+      el.classList.remove('active', 'done');
+      if (state) el.classList.add(state);
+    };
+
+    const advance = () => {
+      if (current > 0) setState(items[current - 1], 'done');
+      if (current < CHECK_STAGES.length) {
+        setState(items[current], 'active');
+        current++;
+      } else {
+        current = 0;
+        items.forEach(el => setState(el, null));
+      }
+      progressFill.style.width = Math.max(6, (current / CHECK_STAGES.length) * 100) + '%';
+    };
+    advance();
+    stageTimer = setInterval(advance, 480);
+  }
+
+  function stopScanningAnimation() {
+    if (stageTimer) { clearInterval(stageTimer); stageTimer = null; }
+    progressFill.style.width = '100%';
+    setTimeout(() => { scanningPanel.style.display = 'none'; }, 350);
+  }
+
+  function submitScan(value) {
+    input.value = value;
+    form.requestSubmit();
+  }
+
+  QUICK_CHIPS.forEach(chip => {
+    chip.addEventListener('click', () => {
+      submitScan(chip.dataset.url);
+      chip.style.transform = 'scale(0.95)';
+      setTimeout(() => { chip.style.transform = ''; }, 120);
+    });
+  });
+
+  scanAgainBtn.addEventListener('click', () => {
+    hideAllPanels();
+    input.value = '';
+    input.focus();
+    hero.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const url = input.value.trim();
+    const url = normalizeUrl(input.value);
+    if (!url) {
+      errorMessage.textContent = 'Please enter a URL to scan.';
+      errorBox.style.display = 'flex';
+      input.focus();
+      return;
+    }
+    input.value = url;
 
-    result.style.display = 'none';
-    errorBox.style.display = 'none';
-    scanning.style.display = 'block';
+    hideAllPanels();
+    scanTarget.textContent = url;
+    startScanningAnimation();
     btn.disabled = true;
-    btn.textContent = 'Scanning…';
+    btnLabel.textContent = 'Scanning…';
 
     try {
       const res = await fetch('/api/public-scan?url=' + encodeURIComponent(url));
       const data = await res.json();
+
+      stopScanningAnimation();
+
+      if (res.status === 429) {
+        rateLimitMessage.textContent = data.error;
+        if (data.rapidapi_url) rateLimitCta.href = data.rapidapi_url;
+        rateLimitPanel.style.display = 'block';
+        return;
+      }
 
       if (!res.ok) {
         throw new Error(data.error || 'Something went wrong.');
@@ -326,37 +1500,70 @@
 
       renderResult(data);
     } catch (err) {
-      errorBox.textContent = err.message;
-      errorBox.style.display = 'block';
+      stopScanningAnimation();
+      errorMessage.textContent = err.message;
+      errorBox.style.display = 'flex';
     } finally {
-      scanning.style.display = 'none';
       btn.disabled = false;
-      btn.textContent = 'Scan';
+      btnLabel.textContent = 'Scan';
     }
   });
 
   function renderResult(data) {
-    scoreNum.textContent = data.security_score;
-    scoreNum.className = 'score-num level-' + data.risk_level;
-    scoreLevel.textContent = data.risk_level + ' risk';
-    scoreLevel.className = 'level level-' + data.risk_level;
+    const score = Math.max(0, Math.min(100, Number(data.security_score) || 0));
+    const level = data.risk_level || 'moderate';
+    const findings = data.findings || [];
+    const realFindings = findings.filter(f => f.severity !== 'info');
+    const summary = data.summary || {};
+
+    scoreNum.textContent = score;
+    scoreRing.className = 'ring level-' + level;
+    ringFg.style.strokeDashoffset = RING_CIRCUMFERENCE * (1 - score / 100);
+
+    scoreLevel.className = 'level level-' + level;
+    scoreLevelText.textContent = level;
+    scoreNote.textContent = LEVEL_NOTE[level] || '';
+
+    const tags = [];
+    if (findings.length === 0) {
+      tags.push('<span class="score-tag"><b>10 / 10</b> checks passed</span>');
+    } else {
+      const passed = Math.max(0, 10 - realFindings.length);
+      tags.push(`<span class="score-tag"><b>${passed} / 10</b> checks passed</span>`);
+      const total = realFindings.length;
+      tags.push(`<span class="score-tag"><b>${total}</b> ${total === 1 ? 'issue' : 'issues'} found</span>`);
+      ['critical', 'high', 'medium', 'low'].forEach(k => {
+        const n = summary[k] || 0;
+        if (n > 0) tags.push(`<span class="score-tag"><b>${n}</b> ${k}</span>`);
+      });
+      tags.push(`<span class="score-tag">scanned <b>${escapeHtml(cleanUrl(data.url || ''))}</b></span>`);
+    }
+    scoreTags.innerHTML = tags.join('');
 
     findingsList.innerHTML = '';
 
-    if (!data.findings || data.findings.length === 0) {
+    if (findings.length === 0) {
+      findingsCount.textContent = '0 issues';
       const clean = document.createElement('div');
       clean.className = 'clean-msg';
-      clean.textContent = '✓ No issues found across all checks.';
+      clean.innerHTML = `
+        <div class="clean-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="clean-body">
+          <div class="clean-text">No issues found across all 10 checks.</div>
+          <div class="clean-sub">Keep an eye on headers and certificates over time — checks like this are a routine, not a one-off.</div>
+        </div>
+      `;
       findingsList.appendChild(clean);
     } else {
-      data.findings.forEach((f, i) => {
+      findingsCount.textContent = (realFindings.length || findings.length) + (realFindings.length === 1 ? ' issue' : ' issues');
+      findings.forEach((f, i) => {
         const row = document.createElement('div');
         row.className = 'finding';
-        row.style.animationDelay = (i * 0.06) + 's';
+        row.style.animationDelay = (i * 0.05) + 's';
         row.innerHTML = `
           <div class="sev-dot sev-${f.severity}"></div>
           <div class="finding-body">
-            <div class="check">${escapeHtml(f.check)} <span style="color:var(--ink-soft); font-weight:400;">— ${SEVERITY_LABEL[f.severity] || f.severity}</span></div>
+            <div class="check">${escapeHtml(f.check)} <span class="sev-pill sev-${f.severity}">${SEVERITY_LABEL[f.severity] || f.severity}</span></div>
             <div class="detail">${escapeHtml(f.detail)}</div>
           </div>
         `;
@@ -365,6 +1572,12 @@
     }
 
     result.style.display = 'block';
+    result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function cleanUrl(url) {
+    try { return url.replace(/^https?:\/\//, '').replace(/\/$/, ''); }
+    catch (e) { return url; }
   }
 
   function escapeHtml(str) {
