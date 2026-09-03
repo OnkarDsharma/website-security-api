@@ -1152,22 +1152,47 @@
   .footer-links a:hover { color: var(--text); }
 
   @media (max-width: 480px) {
-    footer { flex-direction: column; align-items: flex-start; }
-    .navbar { padding: 0 20px; }
-    .nav-links { gap: 14px; }
-    .wrap { padding: 0 18px; }
-    .hero { padding-top: calc(56px + 50px); padding-bottom: 10px; }
-    .hero h1 { font-size: clamp(30px, 8vw, 40px); }
-    .hero .sub { font-size: 15px; }
-    .preview-tabs { gap: 4px; }
-    .preview-tab { font-size: 12px; padding: 5px 12px; }
-    .preview-body { padding: 20px 16px 24px; }
-    .section { padding: 50px 0; }
-    section h2 { font-size: 22px; }
-    form { border-radius: 10px; }
-    input[type="url"] { font-size: 13px; padding: 10px 8px; }
-    button[type="submit"] { height: 40px; padding: 0 16px; font-size: 13px; }
+    footer { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .navbar { padding: 0 16px; height: 50px; }
+    .nav-brand { font-size: 14px; }
+    .nav-links { gap: 12px; }
+    .nav-links a { font-size: 12px; }
+    .wrap { padding: 0 14px; }
+    .hero { padding-top: calc(50px + 40px); padding-bottom: 8px; }
+    .hero h1 { font-size: 28px; line-height: 1.15; }
+    .hero .sub { font-size: 14px; line-height: 1.6; margin-bottom: 28px; }
+    .hero-ctas { gap: 10px; }
+    .btn-primary { font-size: 13px; padding: 9px 16px; }
+    .preview-wrap { margin-top: 32px; border-radius: 14px; }
+    .preview-card { border-radius: 12px; }
+    .preview-tabs { gap: 4px; padding: 14px 12px 0; }
+    .preview-tab { font-size: 11.5px; padding: 5px 10px; gap: 4px; }
+    .preview-tab svg { width: 12px; height: 12px; }
+    .preview-body { padding: 16px 14px 20px; }
+    form { flex-direction: column; padding: 8px; gap: 6px; border-radius: 10px; }
     .input-prefix { display: none; }
+    input[type="url"] { font-size: 13px; padding: 10px 8px; width: 100%; }
+    button[type="submit"] { width: 100%; height: 40px; border-radius: 8px; font-size: 13px; justify-content: center; }
+    .scan-hint { font-size: 11px; margin-top: 10px; }
+    .quick-chips { gap: 6px; margin-top: 12px; }
+    .quick-chips .label { font-size: 10px; }
+    .qchip { font-size: 11px; padding: 5px 10px; }
+    .section { padding: 40px 0; }
+    section h2 { font-size: 20px; }
+    .section-sub { font-size: 14px; margin-bottom: 28px; }
+    .guide-cards { gap: 14px; }
+    .guide-card { padding: 20px; }
+    .guide-card h3 { font-size: 16px; }
+    .guide-card p { font-size: 13px; }
+    .checks-grid { gap: 12px; }
+    .check-card { padding: 18px 20px; }
+    .check-card h4 { font-size: 14px; }
+    .check-card p { font-size: 12.5px; }
+    .score-row { flex-direction: column; align-items: flex-start; gap: 18px; padding: 22px; }
+    .findings-card { padding: 4px 16px; }
+    .finding { gap: 10px; padding: 14px 0; }
+    .finding-body .check { font-size: 12px; }
+    .finding-body .detail { font-size: 13px; }
   }
 </style>
 </head>
@@ -1211,10 +1236,6 @@
             <span class="preview-tab">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5z"/><path d="M14 3v5h5"/></svg>
               Audit Report
-            </span>
-            <span class="preview-tab">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              Headers Check
             </span>
           </div>
           <div class="preview-body">
