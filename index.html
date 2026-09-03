@@ -1152,77 +1152,104 @@
   .footer-links a:hover { color: var(--text); }
 
   @media (max-width: 480px) {
-    footer { flex-direction: column; align-items: flex-start; gap: 10px; }
-    .navbar { padding: 0 16px; height: 48px; }
-    .nav-brand { font-size: 14px; }
-    .nav-links { gap: 10px; }
-    .nav-links a { font-size: 11.5px; }
-    .theme-toggle { width: 30px; height: 30px; }
-    .theme-toggle svg { width: 14px; height: 14px; }
-    .wrap { padding: 0 14px; }
-    .hero { padding-top: calc(48px + 36px); padding-bottom: 6px; }
-    .hero h1 { font-size: 26px; line-height: 1.15; margin-bottom: 16px; }
-    .hero .sub { font-size: 13.5px; line-height: 1.55; margin-bottom: 24px; }
-    .hero-ctas { gap: 10px; }
-    .btn-primary { font-size: 12.5px; padding: 8px 14px; }
-    .preview-wrap { margin-top: 28px; border-radius: 12px; }
-    .preview-card { border-radius: 10px; }
-    .preview-tabs { gap: 2px; padding: 12px 10px 0; }
-    .preview-tab { font-size: 11px; padding: 5px 9px; gap: 3px; }
-    .preview-tab svg { width: 11px; height: 11px; }
-    .preview-body { padding: 14px 12px 18px; }
-    form { flex-direction: column; padding: 6px; gap: 6px; border-radius: 8px; }
+    footer { flex-direction: column; align-items: flex-start; gap: 8px; padding-top: 20px; }
+    .navbar { padding: 0 14px; height: 46px; }
+    .nav-brand { font-size: 13px; }
+    .nav-links { gap: 8px; }
+    .nav-links a { font-size: 11px; }
+    .theme-toggle { width: 28px; height: 28px; }
+    .theme-toggle svg { width: 13px; height: 13px; }
+    .wrap { padding: 0 12px; }
+    .hero { padding-top: calc(46px + 28px); padding-bottom: 4px; }
+    .hero h1 { font-size: 24px; line-height: 1.12; margin-bottom: 12px; }
+    .hero .sub { font-size: 13px; line-height: 1.5; margin-bottom: 20px; }
+    .hero-ctas { gap: 8px; }
+    .btn-primary { font-size: 12px; padding: 7px 13px; border-radius: 8px; }
+    .btn-filled svg { width: 12px; height: 12px; }
+    .preview-wrap { margin-top: 22px; border-radius: 10px; }
+    .preview-card { border-radius: 8px; }
+    .preview-tabs { gap: 2px; padding: 10px 8px 0; }
+    .preview-tab { font-size: 10.5px; padding: 4px 8px; gap: 3px; }
+    .preview-tab svg { width: 10px; height: 10px; }
+    .preview-body { padding: 12px 10px 16px; }
+    form { flex-direction: column; padding: 5px; gap: 5px; border-radius: 7px; }
     .input-prefix { display: none; }
-    input[type="url"] { font-size: 12.5px; padding: 9px 8px; width: 100%; }
-    button[type="submit"] { width: 100%; height: 36px; border-radius: 7px; font-size: 12.5px; justify-content: center; }
-    .scan-hint { font-size: 10.5px; margin-top: 8px; }
-    .quick-chips { gap: 5px; margin-top: 10px; }
-    .quick-chips .label { font-size: 9.5px; }
-    .qchip { font-size: 10.5px; padding: 4px 9px; }
-    .qchip .dot { width: 4px; height: 4px; }
-    .section { padding: 36px 0; }
-    .section-label { font-size: 10.5px; }
-    section h2 { font-size: 19px; margin-bottom: 6px; }
-    .section-sub { font-size: 13px; margin-bottom: 24px; }
-    .guide-cards { gap: 12px; }
-    .guide-card { padding: 18px 16px; }
-    .guide-card .tag { font-size: 9.5px; padding: 2px 8px; }
-    .guide-card h3 { font-size: 15px; margin-bottom: 8px; }
-    .guide-card p { font-size: 12.5px; line-height: 1.55; margin-bottom: 10px; }
-    .guide-list { gap: 6px; }
-    .guide-list li { font-size: 12px; gap: 7px; }
-    .guide-list li svg { width: 12px; height: 12px; }
-    .terminal-wrap { border-radius: 8px; }
-    .terminal-header { padding: 7px 10px; }
-    .terminal-dots { gap: 4px; }
-    .terminal-dot { width: 7px; height: 7px; }
-    .terminal-title { font-size: 9.5px; }
-    .copy-btn { font-size: 9.5px; padding: 2px 6px; }
-    .code-block { font-size: 10px; line-height: 1.6; padding: 10px 12px; }
-    .checks-grid { gap: 10px; }
-    .check-card { padding: 14px 16px; }
-    .check-top { gap: 10px; }
-    .check-ico { width: 34px; height: 34px; border-radius: 8px; }
-    .check-ico svg { width: 17px; height: 17px; }
-    .check-card .num { font-size: 10px; }
-    .check-card h4 { font-size: 13px; }
-    .check-card p { font-size: 12px; line-height: 1.5; margin-top: 6px; }
-    .limitations { font-size: 12px; padding: 14px 16px; }
-    .score-row { flex-direction: column; align-items: flex-start; gap: 16px; padding: 18px; }
-    .ring { width: 110px; height: 110px; }
-    .ring-num .num { font-size: 32px; }
-    .score-meta .level { font-size: 20px; }
-    .findings-title { margin: 20px 0 10px; }
-    .findings-card { padding: 4px 14px; border-radius: 10px; }
-    .finding { gap: 10px; padding: 12px 0; }
-    .sev-dot { width: 8px; height: 8px; margin-top: 5px; }
-    .finding-body .check { font-size: 11.5px; }
-    .sev-pill { font-size: 9px; padding: 2px 6px; }
-    .finding-body .detail { font-size: 12px; }
-    .scan-again { font-size: 11px; padding: 6px 12px; }
-    #rate-limit-panel { padding: 18px 20px; }
-    #rate-limit-panel .title { font-size: 16px; }
-    #rate-limit-panel p { font-size: 13px; }
+    input[type="url"] { font-size: 12px; padding: 8px 7px; width: 100%; }
+    button[type="submit"] { width: 100%; height: 34px; border-radius: 6px; font-size: 12px; justify-content: center; }
+    .scan-hint { font-size: 10px; margin-top: 7px; gap: 4px; }
+    .scan-hint svg { width: 11px; height: 11px; }
+    .quick-chips { gap: 4px; margin-top: 8px; }
+    .quick-chips .label { font-size: 9px; text-transform: lowercase; letter-spacing: 0; }
+    .qchip { font-size: 10px; padding: 3px 8px; gap: 4px; }
+    .qchip .dot { width: 3px; height: 3px; }
+    .section { padding: 28px 0; }
+    .section-label { font-size: 9.5px; margin-bottom: 6px; }
+    section h2 { font-size: 17px; margin-bottom: 4px; }
+    .section-sub { font-size: 12px; line-height: 1.5; margin-bottom: 20px; }
+    .guide-cards { gap: 10px; }
+    .guide-card { padding: 14px 12px; }
+    .guide-card .tag { font-size: 9px; padding: 2px 7px; margin-bottom: 10px; }
+    .guide-card h3 { font-size: 14px; margin-bottom: 6px; }
+    .guide-card p { font-size: 11.5px; line-height: 1.5; margin-bottom: 8px; }
+    .guide-list { gap: 5px; margin-bottom: 10px; }
+    .guide-list li { font-size: 11px; gap: 6px; }
+    .guide-list li svg { width: 11px; height: 11px; }
+    .terminal-wrap { border-radius: 6px; }
+    .terminal-header { padding: 6px 8px; }
+    .terminal-dots { gap: 3px; }
+    .terminal-dot { width: 6px; height: 6px; }
+    .terminal-title { font-size: 9px; }
+    .copy-btn { font-size: 9px; padding: 2px 5px; gap: 3px; border-radius: 4px; }
+    .copy-btn svg { width: 9px; height: 9px; }
+    .code-block { font-size: 9px; line-height: 1.55; padding: 8px 10px; }
+    .checks-grid { gap: 8px; }
+    .check-card { padding: 12px 14px; }
+    .check-top { gap: 8px; }
+    .check-ico { width: 30px; height: 30px; border-radius: 7px; }
+    .check-ico svg { width: 15px; height: 15px; }
+    .check-card .num { font-size: 9px; }
+    .check-card h4 { font-size: 12.5px; }
+    .check-card p { font-size: 11px; line-height: 1.45; margin-top: 4px; }
+    .limitations { font-size: 11px; padding: 12px 14px; margin-top: 14px; line-height: 1.6; }
+    .score-row { flex-direction: column; align-items: flex-start; gap: 14px; padding: 16px; }
+    .ring { width: 100px; height: 100px; }
+    .ring-bg, .ring-fg { stroke-width: 9; }
+    .ring-num .num { font-size: 28px; }
+    .ring-num .of { font-size: 10px; }
+    .score-meta .label { font-size: 9px; }
+    .score-meta .level { font-size: 18px; gap: 8px; }
+    .score-meta .level .level-dot { width: 8px; height: 8px; }
+    .score-note { font-size: 12px; }
+    .score-tags { gap: 4px; }
+    .score-tag { font-size: 9.5px; padding: 3px 8px; }
+    .findings-title { margin: 16px 0 8px; gap: 8px; }
+    .findings-title .f-label { font-size: 9.5px; }
+    .findings-title .f-count { font-size: 9.5px; padding: 2px 7px; }
+    .findings-card { padding: 2px 12px; border-radius: 10px; }
+    .finding { gap: 8px; padding: 10px 0; }
+    .sev-dot { width: 7px; height: 7px; margin-top: 4px; }
+    .finding-body .check { font-size: 11px; gap: 5px; }
+    .sev-pill { font-size: 8px; padding: 1px 5px; }
+    .finding-body .detail { font-size: 11px; line-height: 1.45; margin-top: 3px; }
+    .scan-again { font-size: 10px; padding: 5px 10px; gap: 4px; }
+    .scan-again svg { width: 11px; height: 11px; }
+    .clean-msg { gap: 10px; padding: 14px 0; }
+    .clean-msg .clean-ico { width: 30px; height: 30px; border-radius: 8px; }
+    .clean-msg .clean-ico svg { width: 15px; height: 15px; }
+    .clean-msg .clean-text { font-size: 12px; }
+    .clean-msg .clean-sub { font-size: 11px; }
+    #rate-limit-panel { padding: 16px 18px; border-radius: 10px; }
+    #rate-limit-panel .title { font-size: 15px; }
+    #rate-limit-panel .title svg { width: 18px; height: 18px; }
+    #rate-limit-panel p { font-size: 12px; }
+    #rate-limit-panel a.cta { font-size: 12px; padding: 8px 16px; }
+    .error-box { font-size: 11.5px; padding: 12px 14px; border-radius: 8px; }
+    .error-box svg { width: 14px; height: 14px; }
+    #scanning-panel { padding: 18px 16px; border-radius: 10px; }
+    .scan-head .title { font-size: 14px; }
+    .scan-head .target { font-size: 11px; }
+    .scan-item { font-size: 10.5px; gap: 8px; }
+    .scan-dot { width: 14px; height: 14px; border-radius: 4px; }
   }
 </style>
 </head>
