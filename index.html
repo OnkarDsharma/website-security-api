@@ -1153,46 +1153,76 @@
 
   @media (max-width: 480px) {
     footer { flex-direction: column; align-items: flex-start; gap: 10px; }
-    .navbar { padding: 0 16px; height: 50px; }
+    .navbar { padding: 0 16px; height: 48px; }
     .nav-brand { font-size: 14px; }
-    .nav-links { gap: 12px; }
-    .nav-links a { font-size: 12px; }
+    .nav-links { gap: 10px; }
+    .nav-links a { font-size: 11.5px; }
+    .theme-toggle { width: 30px; height: 30px; }
+    .theme-toggle svg { width: 14px; height: 14px; }
     .wrap { padding: 0 14px; }
-    .hero { padding-top: calc(50px + 40px); padding-bottom: 8px; }
-    .hero h1 { font-size: 28px; line-height: 1.15; }
-    .hero .sub { font-size: 14px; line-height: 1.6; margin-bottom: 28px; }
+    .hero { padding-top: calc(48px + 36px); padding-bottom: 6px; }
+    .hero h1 { font-size: 26px; line-height: 1.15; margin-bottom: 16px; }
+    .hero .sub { font-size: 13.5px; line-height: 1.55; margin-bottom: 24px; }
     .hero-ctas { gap: 10px; }
-    .btn-primary { font-size: 13px; padding: 9px 16px; }
-    .preview-wrap { margin-top: 32px; border-radius: 14px; }
-    .preview-card { border-radius: 12px; }
-    .preview-tabs { gap: 4px; padding: 14px 12px 0; }
-    .preview-tab { font-size: 11.5px; padding: 5px 10px; gap: 4px; }
-    .preview-tab svg { width: 12px; height: 12px; }
-    .preview-body { padding: 16px 14px 20px; }
-    form { flex-direction: column; padding: 8px; gap: 6px; border-radius: 10px; }
+    .btn-primary { font-size: 12.5px; padding: 8px 14px; }
+    .preview-wrap { margin-top: 28px; border-radius: 12px; }
+    .preview-card { border-radius: 10px; }
+    .preview-tabs { gap: 2px; padding: 12px 10px 0; }
+    .preview-tab { font-size: 11px; padding: 5px 9px; gap: 3px; }
+    .preview-tab svg { width: 11px; height: 11px; }
+    .preview-body { padding: 14px 12px 18px; }
+    form { flex-direction: column; padding: 6px; gap: 6px; border-radius: 8px; }
     .input-prefix { display: none; }
-    input[type="url"] { font-size: 13px; padding: 10px 8px; width: 100%; }
-    button[type="submit"] { width: 100%; height: 40px; border-radius: 8px; font-size: 13px; justify-content: center; }
-    .scan-hint { font-size: 11px; margin-top: 10px; }
-    .quick-chips { gap: 6px; margin-top: 12px; }
-    .quick-chips .label { font-size: 10px; }
-    .qchip { font-size: 11px; padding: 5px 10px; }
-    .section { padding: 40px 0; }
-    section h2 { font-size: 20px; }
-    .section-sub { font-size: 14px; margin-bottom: 28px; }
-    .guide-cards { gap: 14px; }
-    .guide-card { padding: 20px; }
-    .guide-card h3 { font-size: 16px; }
-    .guide-card p { font-size: 13px; }
-    .checks-grid { gap: 12px; }
-    .check-card { padding: 18px 20px; }
-    .check-card h4 { font-size: 14px; }
-    .check-card p { font-size: 12.5px; }
-    .score-row { flex-direction: column; align-items: flex-start; gap: 18px; padding: 22px; }
-    .findings-card { padding: 4px 16px; }
-    .finding { gap: 10px; padding: 14px 0; }
-    .finding-body .check { font-size: 12px; }
-    .finding-body .detail { font-size: 13px; }
+    input[type="url"] { font-size: 12.5px; padding: 9px 8px; width: 100%; }
+    button[type="submit"] { width: 100%; height: 36px; border-radius: 7px; font-size: 12.5px; justify-content: center; }
+    .scan-hint { font-size: 10.5px; margin-top: 8px; }
+    .quick-chips { gap: 5px; margin-top: 10px; }
+    .quick-chips .label { font-size: 9.5px; }
+    .qchip { font-size: 10.5px; padding: 4px 9px; }
+    .qchip .dot { width: 4px; height: 4px; }
+    .section { padding: 36px 0; }
+    .section-label { font-size: 10.5px; }
+    section h2 { font-size: 19px; margin-bottom: 6px; }
+    .section-sub { font-size: 13px; margin-bottom: 24px; }
+    .guide-cards { gap: 12px; }
+    .guide-card { padding: 18px 16px; }
+    .guide-card .tag { font-size: 9.5px; padding: 2px 8px; }
+    .guide-card h3 { font-size: 15px; margin-bottom: 8px; }
+    .guide-card p { font-size: 12.5px; line-height: 1.55; margin-bottom: 10px; }
+    .guide-list { gap: 6px; }
+    .guide-list li { font-size: 12px; gap: 7px; }
+    .guide-list li svg { width: 12px; height: 12px; }
+    .terminal-wrap { border-radius: 8px; }
+    .terminal-header { padding: 7px 10px; }
+    .terminal-dots { gap: 4px; }
+    .terminal-dot { width: 7px; height: 7px; }
+    .terminal-title { font-size: 9.5px; }
+    .copy-btn { font-size: 9.5px; padding: 2px 6px; }
+    .code-block { font-size: 10px; line-height: 1.6; padding: 10px 12px; }
+    .checks-grid { gap: 10px; }
+    .check-card { padding: 14px 16px; }
+    .check-top { gap: 10px; }
+    .check-ico { width: 34px; height: 34px; border-radius: 8px; }
+    .check-ico svg { width: 17px; height: 17px; }
+    .check-card .num { font-size: 10px; }
+    .check-card h4 { font-size: 13px; }
+    .check-card p { font-size: 12px; line-height: 1.5; margin-top: 6px; }
+    .limitations { font-size: 12px; padding: 14px 16px; }
+    .score-row { flex-direction: column; align-items: flex-start; gap: 16px; padding: 18px; }
+    .ring { width: 110px; height: 110px; }
+    .ring-num .num { font-size: 32px; }
+    .score-meta .level { font-size: 20px; }
+    .findings-title { margin: 20px 0 10px; }
+    .findings-card { padding: 4px 14px; border-radius: 10px; }
+    .finding { gap: 10px; padding: 12px 0; }
+    .sev-dot { width: 8px; height: 8px; margin-top: 5px; }
+    .finding-body .check { font-size: 11.5px; }
+    .sev-pill { font-size: 9px; padding: 2px 6px; }
+    .finding-body .detail { font-size: 12px; }
+    .scan-again { font-size: 11px; padding: 6px 12px; }
+    #rate-limit-panel { padding: 18px 20px; }
+    #rate-limit-panel .title { font-size: 16px; }
+    #rate-limit-panel p { font-size: 13px; }
   }
 </style>
 </head>
