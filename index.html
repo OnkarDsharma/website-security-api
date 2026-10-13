@@ -142,7 +142,7 @@
 
   /* ---------- Container ---------- */
   .container {
-    max-width: 980px;
+    max-width: 1020px;
     margin: 0 auto;
     padding: 0 24px;
   }
@@ -267,12 +267,12 @@
   }
 
   .hero h1 {
-    font-size: clamp(32px, 4.5vw, 48px);
+    font-size: clamp(32px, 4.2vw, 46px);
     font-weight: 600;
-    line-height: 1.14;
+    line-height: 1.15;
     letter-spacing: -0.025em;
     color: var(--text-primary);
-    max-width: 780px;
+    max-width: 680px;
     margin-bottom: 16px;
   }
 
@@ -280,7 +280,7 @@
     font-size: 15px;
     line-height: 1.6;
     color: var(--text-secondary);
-    max-width: 580px;
+    max-width: 540px;
     margin-bottom: 24px;
   }
 
@@ -313,13 +313,15 @@
   }
 
   .btn-primary-action {
-    background: var(--text-primary);
-    color: var(--bg);
-    border: 1px solid var(--text-primary);
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border);
   }
 
   .btn-primary-action:hover {
-    opacity: 0.92;
+    color: var(--text-primary);
+    border-color: var(--text-secondary);
+    background: var(--surface-1);
   }
 
   .btn-secondary-action {
@@ -339,29 +341,8 @@
     background: var(--surface-1);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 24px;
+    padding: 20px 24px;
     margin-bottom: 32px;
-  }
-
-  .scanner-card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 14px;
-  }
-
-  .scanner-title {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-muted);
-    font-family: var(--font-mono);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  .scanner-status {
-    font-size: 12px;
-    color: var(--text-muted);
   }
 
   form.scan-form {
@@ -1142,25 +1123,24 @@
 
   .limitations-box {
     margin-top: 24px;
-    padding: 14px 16px;
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    background: var(--surface-1);
-    font-size: 12.5px;
+    padding: 10px 0 10px 14px;
+    border-left: 2px solid var(--border);
+    font-size: 13px;
     line-height: 1.55;
-    color: var(--text-secondary);
+    color: var(--text-muted);
   }
 
   .limitations-box strong {
-    color: var(--text-primary);
+    color: var(--text-secondary);
     font-weight: 500;
   }
 
   /* ---------- Integration Section (Option A: Two clear methods) ---------- */
   .integration-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 3fr;
     gap: 24px;
+    align-items: stretch;
   }
 
   @media (max-width: 760px) {
@@ -1182,8 +1162,7 @@
     font-family: var(--font-mono);
     font-size: 11px;
     color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.04em;
     margin-bottom: 12px;
   }
 
@@ -1381,10 +1360,6 @@
       </div>
 
       <div class="scanner-card" id="scanner-container">
-        <div class="scanner-card-header">
-          <span class="scanner-title">Security Scanner</span>
-          <span class="scanner-status">Free instant check</span>
-        </div>
         <form class="scan-form" id="scan-form" role="search" aria-label="Scan a website for security issues">
           <span class="scan-input-prefix" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
@@ -1481,7 +1456,6 @@
     <!-- What we check -->
     <section class="section checks" id="checks-section">
       <div class="section-header">
-        <div class="section-label">Inspection Vectors</div>
         <h2 class="section-title">What we check</h2>
         <p class="section-desc">Each scan evaluates 10 security checks and explains findings in actionable developer terms.</p>
       </div>
@@ -1565,7 +1539,6 @@
     <!-- How to use this -->
     <section class="section guide" id="guide-section">
       <div class="section-header">
-        <div class="section-label">Workflow</div>
         <h2 class="section-title">How to use this</h2>
         <p class="section-desc">Run immediate browser checks or automate security audits directly in your CI/CD pipeline.</p>
       </div>
