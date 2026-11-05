@@ -1,11 +1,13 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
+const { client } = require('../lib/safeFetch');
+
 const { checkExposedPaths } = require('../lib/checkExposedPaths');
 const { findingShapeAssert, makeResponse } = require('./helpers');
 
 test('checkExposedPaths returns inconclusive when baseline path returns 200', async (t) => {
-  t.mock.method(global, 'fetch', async () => makeResponse({ status: 200 }));
+  t.mock.method(client, 'fetch', async () => makeResponse({ status: 200 }));
 
   const findings = await checkExposedPaths('https://example.com/page');
 
@@ -16,7 +18,7 @@ test('checkExposedPaths returns inconclusive when baseline path returns 200', as
 });
 
 test('checkExposedPaths flags real file-looking leaks and skips HTML decoys', async (t) => {
-  t.mock.method(global, 'fetch', async (url) => {
+  t.mock.method(client, 'fetch', async (url) => {
     const path = new URL(url).pathname;
 
     if (path.startsWith('/this-path-should-never-exist-')) {
@@ -56,7 +58,7 @@ test('checkExposedPaths flags real file-looking leaks and skips HTML decoys', as
 });
 
 test('checkExposedPaths reports unreachable targets on baseline failure', async (t) => {
-  t.mock.method(global, 'fetch', async () => {
+  t.mock.method(client, 'fetch', async () => {
     throw new Error('connection refused');
   });
 

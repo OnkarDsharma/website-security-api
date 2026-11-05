@@ -1,11 +1,13 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
+const { client } = require('../lib/safeFetch');
+
 const { checkCMSVersion } = require('../lib/checkCMS');
 const { findingShapeAssert, makeResponse } = require('./helpers');
 
 test('checkCMSVersion flags old WordPress versions', async (t) => {
-  t.mock.method(global, 'fetch', async () => makeResponse({
+  t.mock.method(client, 'fetch', async () => makeResponse({
     body: '<meta name="generator" content="WordPress 5.9.9">'
   }));
 
@@ -19,7 +21,7 @@ test('checkCMSVersion flags old WordPress versions', async (t) => {
 });
 
 test('checkCMSVersion reports current CMS versions as informational', async (t) => {
-  t.mock.method(global, 'fetch', async () => makeResponse({
+  t.mock.method(client, 'fetch', async () => makeResponse({
     body: '<meta name="generator" content="Joomla! 4.4.0">'
   }));
 
@@ -32,7 +34,7 @@ test('checkCMSVersion reports current CMS versions as informational', async (t) 
 });
 
 test('checkCMSVersion reports unreachable targets', async (t) => {
-  t.mock.method(global, 'fetch', async () => {
+  t.mock.method(client, 'fetch', async () => {
     throw new Error('timeout');
   });
 

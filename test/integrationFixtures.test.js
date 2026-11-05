@@ -6,6 +6,11 @@ const { checkCMSVersion } = require('../lib/checkCMS');
 const { checkExposedPaths } = require('../lib/checkExposedPaths');
 const { checkSecurityHeaders } = require('../lib/checkHeaders');
 const { checkServerLeakage } = require('../lib/checkServerLeakage');
+const { __setAllowPrivateTargetsForTests } = require('../lib/urlSafety');
+
+// Fixture servers listen on 127.0.0.1, which the SSRF guard blocks.
+test.before(() => __setAllowPrivateTargetsForTests(true));
+test.after(() => __setAllowPrivateTargetsForTests(false));
 
 function createFixtureServer(mode = 'default') {
   const server = http.createServer((req, res) => {

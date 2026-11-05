@@ -1,11 +1,13 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
+const { client } = require('../lib/safeFetch');
+
 const { checkSecurityHeaders } = require('../lib/checkHeaders');
 const { findingShapeAssert, makeResponse } = require('./helpers');
 
 test('checkSecurityHeaders returns missing security header findings', async (t) => {
-  t.mock.method(global, 'fetch', async () => makeResponse());
+  t.mock.method(client, 'fetch', async () => makeResponse());
 
   const findings = await checkSecurityHeaders('https://example.com');
 
@@ -24,7 +26,7 @@ test('checkSecurityHeaders returns missing security header findings', async (t) 
 });
 
 test('checkSecurityHeaders returns no findings when all headers are present', async (t) => {
-  t.mock.method(global, 'fetch', async () => makeResponse({
+  t.mock.method(client, 'fetch', async () => makeResponse({
     headers: {
       'strict-transport-security': 'max-age=31536000',
       'content-security-policy': "default-src 'self'",
@@ -40,7 +42,7 @@ test('checkSecurityHeaders returns no findings when all headers are present', as
 });
 
 test('checkSecurityHeaders reports unreachable targets', async (t) => {
-  t.mock.method(global, 'fetch', async () => {
+  t.mock.method(client, 'fetch', async () => {
     throw new Error('network down');
   });
 
